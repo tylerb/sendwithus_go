@@ -16,15 +16,15 @@ This is a brief example on how to send 1 email. You can find more examples by lo
 package main
 
 import (
-  "github.com/elbuo8/sendwithus_go"
+  "github.com/tylerb/sendwithus_go"
   "fmt"
 )
 
 func main() {
-	api := New("SWU_KEY")
-	email := &SWUEmail{
+	api := swu.New("SWU_KEY")
+	email := &swu.Email{
 		ID: "EMAIL_TEMPLATE_ID",
-		Recipient: &SWURecipient{
+		Recipient: &swu.Recipient{
 			Address: "example@email.com",
 		},
 		EmailData: make(map[string]string),
