@@ -39,7 +39,7 @@ func TestGetTemplateVersion(t *testing.T) {
 func TestUpdateTemplateVersion(t *testing.T) {
 	api := New(os.Getenv("SWU_KEY"))
 	_, err := api.UpdateTemplateVersion("tem_bRKXvNLAXTG8EGxhut3gCe", "ver_Hh35dZhnffghidEy6VeHKL",
-		&SWUVersion{
+		&Version{
 			Name:    "Test",
 			Subject: "Test",
 			Text:    "test",
@@ -51,7 +51,7 @@ func TestUpdateTemplateVersion(t *testing.T) {
 
 func TestCreateTemplate(t *testing.T) {
 	api := New(os.Getenv("SWU_KEY"))
-	_, err := api.CreateTemplate(&SWUVersion{
+	_, err := api.CreateTemplate(&Version{
 		Name:    "test",
 		Subject: "test",
 		Text:    "ALOHA",
@@ -63,7 +63,7 @@ func TestCreateTemplate(t *testing.T) {
 
 func TestCreateTemplateVersion(t *testing.T) {
 	api := New(os.Getenv("SWU_KEY"))
-	_, err := api.CreateTemplateVersion("tem_nXAPFGXQXFKcibJHdm9PZ9", &SWUVersion{
+	_, err := api.CreateTemplateVersion("tem_nXAPFGXQXFKcibJHdm9PZ9", &Version{
 		Name:    "test",
 		Subject: "test",
 		Text:    "ALOHA1",
@@ -75,9 +75,9 @@ func TestCreateTemplateVersion(t *testing.T) {
 
 func TestSend(t *testing.T) {
 	api := New(os.Getenv("SWU_KEY"))
-	email := &SWUEmail{
+	email := &Email{
 		ID: "tem_bRKXvNLAXTG8EGxhut3gCe",
-		Recipient: &SWURecipient{
+		Recipient: &Recipient{
 			Address: "yamil@sendgrid.com",
 		},
 		EmailData: make(map[string]string),
