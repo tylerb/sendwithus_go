@@ -54,6 +54,16 @@ type Email struct {
 	VersionName string        `json:"version_name,omitempty"`
 }
 
+type Drip struct {
+	Recipient  *Recipient
+	CC         []*Recipient `json:"cc,omitempty"`
+	BCC        []*Recipient `json:"bcc,omitempty"`
+	EmailData  interface{}  `json:"email_data,omitempty"`
+	Sender     *Sender      `json:"sender,omitempty"`
+	Tags       []string     `json:"tags,omitempty"`
+	ESPAccount string       `json:"esp_account,omitempty"`
+}
+
 type Recipient struct {
 	Address string `json:"address,omitempty"`
 	Name    string `json:"name,omitempty"`
@@ -176,6 +186,22 @@ func (c *Client) Send(email *Email) error {
 		return err
 	}
 	return c.makeRequest("POST", "/send", bytes.NewReader(payload), nil)
+}
+
+func (c *Client) BeginDrip(dripID string, drip *Drip) error {
+	payload, err := json.Marshal(drip)
+	if err != nil {
+		return err
+	}
+	return c.makeRequest("POST", "/drip_campaigns/"+dripID+"/activate", bytes.NewReader(payload), nil)
+}
+
+func (c *Client) CancelDrip(dripID string, recipientEmail string) error {
+	payload, err := json.Marshal(map[string]interface{}{"recipient_address": recipientEmail})
+	if err != nil {
+		return err
+	}
+	return c.makeRequest("POST", "/drip_campaigns/"+dripID+"/deactivate", bytes.NewReader(payload), nil)
 }
 
 func (c *Client) GetLogs(q *LogQuery) ([]*Log, error) {
