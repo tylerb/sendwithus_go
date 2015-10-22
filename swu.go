@@ -55,7 +55,7 @@ type Email struct {
 }
 
 type Drip struct {
-	Recipient  *Recipient
+	Recipient  *Recipient   `json:"recipient,omitempty"`
 	CC         []*Recipient `json:"cc,omitempty"`
 	BCC        []*Recipient `json:"bcc,omitempty"`
 	EmailData  interface{}  `json:"email_data,omitempty"`
