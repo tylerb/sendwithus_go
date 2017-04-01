@@ -234,8 +234,12 @@ func (c *Client) makeRequest(method, endpoint string, body io.Reader, result int
 	r.Header.Set("X--API-CLIENT", APIHeaderClient)
 	res, err := c.Client.Do(r)
 	if err != nil {
+		var code int
+		if res != nil {
+			code = res.StatusCode
+		}
 		return &Error{
-			Code:    res.StatusCode,
+			Code:    code,
 			Message: err.Error(),
 		}
 	}
