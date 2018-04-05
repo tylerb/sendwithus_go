@@ -87,3 +87,15 @@ func TestSend(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestRender(t *testing.T) {
+	api := New(os.Getenv("SWU_KEY"))
+	req := &RenderRequest{
+		Template: "tem_Jx7kFb39gk7kTVd78Xpy8BWR",
+		TemplateData: make(map[string]string),
+	}
+	_, err := api.Render(req)
+	if err != nil {
+		t.Error(err)
+	}
+}
