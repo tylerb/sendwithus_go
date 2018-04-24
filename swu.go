@@ -54,6 +54,17 @@ type Email struct {
 	VersionName string        `json:"version_name,omitempty"`
 }
 
+type SendResponse struct {
+	Success   bool   `json:"success"`
+	Status    string `json:"status"`
+	ReceiptID string `json:"receipt_id"`
+	Email     struct {
+		Name        string `json:"name"`
+		VersionName string `json:"version_name"`
+		Locale      string `json:"locale"`
+	} `json:"email"`
+}
+
 type Drip struct {
 	Recipient  *Recipient   `json:"recipient,omitempty"`
 	CC         []*Recipient `json:"cc,omitempty"`
@@ -180,12 +191,14 @@ func (c *Client) CreateTemplateVersion(id string, template *Version) (*Template,
 	return &result, c.makeRequest("POST", "/templates/"+id+"/versions", bytes.NewReader(payload), &result)
 }
 
-func (c *Client) Send(email *Email) error {
+func (c *Client) Send(email *Email) (SendResponse, error) {
 	payload, err := json.Marshal(email)
 	if err != nil {
-		return err
+		return SendResponse{}, err
 	}
-	return c.makeRequest("POST", "/send", bytes.NewReader(payload), nil)
+	var sr SendResponse
+	err = c.makeRequest("POST", "/send", bytes.NewReader(payload), &sr)
+	return sr, err
 }
 
 func (c *Client) BeginDrip(dripID string, drip *Drip) error {
