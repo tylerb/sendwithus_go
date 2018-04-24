@@ -128,6 +128,29 @@ type LogResend struct {
 	} `json:"email"`
 }
 
+type RenderRequest struct {
+	Template     string      `json:"template"`
+	TemplateData interface{} `json:"template_data"`
+	VersionID    string      `json:"version_id,omitempty"`
+	VersionName  string      `json:"version_name,omitempty"`
+	Locale       string      `json:"locale,omitempty"`
+	Strict       bool        `json:"strict,omitempty"`
+}
+
+type RenderResponse struct {
+	Success  bool   `json:"success"`
+	Status   string `json:"status"`
+	Template struct {
+		ID          string `json:"id"`
+		Name        string `json:"name"`
+		VersionName string `json:"version_name"`
+		Locale      string `json:"locale"`
+	} `json:"template"`
+	Subject string `json:"subject"`
+	HTML    string `json:"html"`
+	Text    string `json:"text"`
+}
+
 type Error struct {
 	Code    int
 	Message string
@@ -239,6 +262,16 @@ func (c *Client) ResendLog(id string) (*LogResend, error) {
 	}
 	payload, _ := json.Marshal(result)
 	return result, c.makeRequest("POST", "/resend", bytes.NewReader(payload), result)
+}
+
+func (c *Client) Render(request *RenderRequest) (*RenderResponse, error) {
+	payload, err := json.Marshal(request)
+	if err != nil {
+		return nil, err
+	}
+
+	result := &RenderResponse{}
+	return result, c.makeRequest("POST", "/render", bytes.NewReader(payload), result)
 }
 
 func (c *Client) makeRequest(method, endpoint string, body io.Reader, result interface{}) error {
