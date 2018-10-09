@@ -52,6 +52,7 @@ type Email struct {
 	Files       []*Attachment `json:"files,omitempty"`
 	ESPAccount  string        `json:"esp_account,omitempty"`
 	VersionName string        `json:"version_name,omitempty"`
+	Locale      string        `json:"locale,omitempty"`
 }
 
 type SendResponse struct {
