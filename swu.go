@@ -22,6 +22,14 @@ type Client struct {
 	URL    string
 }
 
+type Snippet struct {
+	ID       string `json:"id,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Body     string `json:"body,omitempty"`
+	Created  int64  `json:"created,omitempty"`
+	Modified int64  `json:"modified,omitempty"`
+}
+
 type Template struct {
 	ID       string     `json:"id,omitempty"`
 	Tags     []string   `json:"tags,omitempty"`
@@ -169,6 +177,11 @@ func New(apiKey string) *Client {
 	}
 }
 
+func (c *Client) Snippets() ([]Snippet, error) {
+	var result []Snippet
+	return result, c.makeRequest("GET", "/snippets", nil, &result)
+}
+
 func (c *Client) Templates() ([]*Template, error) {
 	return c.Emails()
 }
@@ -181,6 +194,11 @@ func (c *Client) Emails() ([]*Template, error) {
 func (c *Client) GetTemplate(id string) (*Template, error) {
 	var result Template
 	return &result, c.makeRequest("GET", "/templates/"+id, nil, &result)
+}
+
+func (c *Client) GetTemplateVersions(id string) ([]Version, error) {
+	var result []Version
+	return result, c.makeRequest("GET", "/templates/"+id+"/versions", nil, &result)
 }
 
 func (c *Client) GetTemplateVersion(id, version string) (*Version, error) {
